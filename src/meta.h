@@ -19,7 +19,12 @@
  * along with light-play.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __META_H__
+#define __META_H__
+
 #include "m4afile.h"
 
 void m4aFileMetadataHandler(uint32_t boxType, uint8_t *buffer, uint32_t bufferSize, M4AFileMetadataType metadataType);
 int mkMetaData(uint8_t *buffer);
+
+#endif  /* __META_H__ */

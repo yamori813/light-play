@@ -27,18 +27,21 @@
 #define BOX_TYPE_ART  0xA9415254  // Name of the artist
 #define BOX_TYPE_ALB  0xA9616C62  // Name of the album
 
-uint8_t album[1024];
-int album_size;
-uint8_t artist[1024];
-int artist_size;
-uint8_t title[1024];
-int title_size;
+struct MetaDataStruct {
+        uint8_t metaDataBuffer[1024];
+        size_t metaDataBufferSize;
+};
+
+typedef struct MetaDataStruct MetaData;
+
+static MetaData album;
+static MetaData artist;
+static MetaData title;
 
 void m4aFileMetadataHandler(uint32_t boxType, uint8_t *buffer, uint32_t bufferSize, M4AFileMetadataType metadataType)
 {
-int i;
-
 #if 0
+int i;
 	if (boxType == BOX_TYPE_NAM || boxType == BOX_TYPE_ART ||
 	     boxType == BOX_TYPE_ALB) {
 		printf("MetaData %08x %d ", boxType, bufferSize);
@@ -50,36 +53,34 @@ int i;
 #endif
 
 	if (boxType == BOX_TYPE_ALB) {
-		album_size = bufferSize;
-		memcpy(album, buffer, bufferSize);
+		album.metaDataBufferSize = bufferSize;
+		memcpy(album.metaDataBuffer, buffer, bufferSize);
 	}
 	if (boxType == BOX_TYPE_ART) {
-		artist_size = bufferSize;
-		memcpy(artist, buffer, bufferSize);
+		artist.metaDataBufferSize = bufferSize;
+		memcpy(artist.metaDataBuffer, buffer, bufferSize);
 	}
 	if (boxType == BOX_TYPE_NAM) {
-		title_size = bufferSize;
-		memcpy(title, buffer, bufferSize);
+		title.metaDataBufferSize = bufferSize;
+		memcpy(title.metaDataBuffer, buffer, bufferSize);
 	}
 }
 
-static int cpMetaData(uint8_t *buffer, char *boxtype, uint8_t *val, int size)
+static int cpMetaData(uint8_t *buffer, char *boxtype, MetaData *meta)
 {
 int i;
 
-	i = 0;
-
 	memcpy(buffer, boxtype, 4);
+	i = 4;
+
+	buffer[i] = meta->metaDataBufferSize >> 24;
+	buffer[i+1] = (meta->metaDataBufferSize  >> 16) & 0xff;
+	buffer[i+2] = (meta->metaDataBufferSize  >> 8) & 0xff;
+	buffer[i+3] = meta->metaDataBufferSize  & 0xff;
 	i += 4;
 
-	buffer[i] = size >> 24;
-	buffer[i+1] = (size >> 16) & 0xff;
-	buffer[i+2] = (size >> 8) & 0xff;
-	buffer[i+3] = size & 0xff;
-	i += 4;
-
-	memcpy(buffer + i, val, size);
-	i += size;
+	memcpy(buffer + i, meta->metaDataBuffer, meta->metaDataBufferSize );
+	i += meta->metaDataBufferSize;
 
 	return i;
 }
@@ -89,12 +90,12 @@ int mkMetaData(uint8_t *buffer)
 int off;
 
 	off = 8;
-	if (album_size)
-		off += cpMetaData(buffer + off, "asal", album, album_size);
-	if (artist_size)
-		off += cpMetaData(buffer + off, "asar", artist, artist_size);
-	if (title_size)
-		off += cpMetaData(buffer + off, "minm", title, title_size);
+	if (album.metaDataBufferSize)
+		off += cpMetaData(buffer + off, "asal", &album);
+	if (artist.metaDataBufferSize)
+		off += cpMetaData(buffer + off, "asar", &artist);
+	if (title.metaDataBufferSize)
+		off += cpMetaData(buffer + off, "minm", &title);
 
 	return off;
 }
