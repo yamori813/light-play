@@ -38,6 +38,7 @@ void m4aFileMetadataHandler(uint32_t boxType, uint8_t *buffer, uint32_t bufferSi
 {
 int i;
 
+#if 0
 	if (boxType == BOX_TYPE_NAM || boxType == BOX_TYPE_ART ||
 	     boxType == BOX_TYPE_ALB) {
 		printf("MetaData %08x %d ", boxType, bufferSize);
@@ -46,6 +47,7 @@ int i;
 		}
 		putchar('\n');
 	}
+#endif
 
 	if (boxType == BOX_TYPE_ALB) {
 		album_size = bufferSize;
