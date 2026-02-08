@@ -8,6 +8,7 @@
 #include "raopclient.h"
 #include "log.h"
 #include "buffer.h"
+#include "meta.h"
 
 static const char *LOG_COMPONENT_NAME = "light-play.c";
 
@@ -196,6 +197,7 @@ int main(int argc, char** argv) {
 	if(m4aFile == NULL) {
 		return 1;
 	}
+	m4aFileSetMetadataHandler(m4aFile, m4aFileMetadataHandler);
 	if(!m4aFileParse(m4aFile)) {
 		return 1;
 	}

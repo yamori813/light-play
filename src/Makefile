@@ -13,6 +13,7 @@ OBJS=light-play.o \
 	buffer.o \
 	log.o \
 	utils.o \
+	meta.o \
 	md5/md5.o
 
 all: light-play

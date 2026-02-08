@@ -33,6 +33,7 @@
 #include "log.h"
 #include "buffer.h"
 #include "utils.h"
+#include "meta.h"
 
 /* Values for volume. Anything below VOLUME_MIN_VALUE will be set to 'muted'. Anything above VOLUME_MAX_VALUE will be set to VOLUME_MAX_VALUE. */
 #define VOLUME_DEFAULT			15.0
@@ -51,6 +52,7 @@
 #define	MAX_SET_PARAMETER_CONTENT_SIZE	20
 #define	MAX_NUMBER_STRING_SIZE		11
 #define AUDIO_MESSAGE_HEADER_SIZE	16
+#define	MAX_SET_PARAMETER_META_SIZE	1024
 
 /* Type definition for the RAOP client */
 struct RAOPClientStruct {
@@ -90,6 +92,7 @@ static bool raopClientWaitForBufferedAudio(RAOPClient *raopClient);
 static bool raopClientSetupAudioConnection(RAOPClient *raopClient);
 static bool raopClientAnnounceContentSupplier(RAOPClient *raopClient, RTSPRequest *rtspRequest);
 static bool raopClientSetVolumeContentSupplier(RAOPClient *raopClient, RTSPRequest *rtspRequest);
+static bool raopClientSetMetaData(RAOPClient *raopClient, RTSPRequest *rtspRequest);
 static bool raopClientCloseConnectionInternal(RAOPClient **raopClient);
 
 RAOPClient *raopClientOpenConnection(const char *hostName, const char *portName, const char *password) {
@@ -182,6 +185,10 @@ bool raopClientPlayM4AFile(RAOPClient *raopClient, M4AFile *m4aFile, struct time
 
 	/* Send SET_PARAMETER command (for the volume) */
 	if(!rtspClientSendCommand(raopClient->rtspClient, RTSP_METHOD_SET_PARAMETER, raopClient, raopClientSetVolumeContentSupplier)) {
+		return false;
+	}
+	/* Send SET_PARAMETER command (for the meta) */
+	if(!rtspClientSendCommand(raopClient->rtspClient, RTSP_METHOD_SET_PARAMETER, raopClient, raopClientSetMetaData)) {
 		return false;
 	}
 
@@ -481,6 +488,19 @@ bool raopClientSetVolumeContentSupplier(RAOPClient *raopClient, RTSPRequest *rts
 	contentSize = strlen(content);
 
 	if(!rtspRequestSetContent(rtspRequest, (uint8_t *)content, contentSize, "text/parameters")) {
+		return false;
+	}
+
+	return true;
+}
+
+bool raopClientSetMetaData(RAOPClient *raopClient, RTSPRequest *rtspRequest) {
+	uint8_t content[MAX_SET_PARAMETER_META_SIZE];
+	size_t contentSize;
+
+	contentSize = mkMetaData(content);
+
+	if(!rtspRequestSetContent(rtspRequest, content, contentSize, "application/x-dmap-tagged")) {
 		return false;
 	}
 
