@@ -288,6 +288,7 @@ bool raopClientSendAudioMessages(RAOPClient *raopClient) {
 		audioMessage[0] = 0x24;
 		audioMessage[4] = 0xf0;
 		audioMessage[5] = 0xff;
+		audioMessage[6] = m4aFileGetEncoding(raopClient->m4aFile);
 		packetLength = (uint16_t)htons(sampleSize + 12);
 		memcpy(audioMessage + 2, &packetLength, sizeof(uint16_t));
 
