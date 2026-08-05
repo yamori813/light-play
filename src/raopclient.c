@@ -288,7 +288,6 @@ bool raopClientSendAudioMessages(RAOPClient *raopClient) {
 		audioMessage[0] = 0x24;
 		audioMessage[4] = 0xf0;
 		audioMessage[5] = 0xff;
-		audioMessage[6] = m4aFileGetEncoding(raopClient->m4aFile);
 		packetLength = (uint16_t)htons(sampleSize + 12);
 		memcpy(audioMessage + 2, &packetLength, sizeof(uint16_t));
 
@@ -463,8 +462,8 @@ bool raopClientAnnounceContentSupplier(RAOPClient *raopClient, RTSPRequest *rtsp
 			"c=IN IP4 %s\r\n"
 			"t=0 0\r\n"
 			"m=audio 0 RTP/AVP 96\r\n"
-			"a=rtpmap:96 AppleLossless\r\n"
-			"a=fmtp:96 4096 0 16 40 10 14 2 255 0 0 %" PRIu32 "\r\n", localAddressName, remoteAddressName, m4aFileGetTimescale(raopClient->m4aFile)) < 0) {
+			"a=rtpmap:96 %s\r\n"
+			"a=fmtp:96 4096 0 16 40 10 14 2 255 0 0 %" PRIu32 "\r\n", localAddressName, remoteAddressName, m4aFileGetEncoding(raopClient->m4aFile) == ENCODING_AAC ? "mpeg4-generic" : "AppleLossless", m4aFileGetTimescale(raopClient->m4aFile)) < 0) {
 		return false;
 	}
 	contentSize = strlen(content);
