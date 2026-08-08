@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
 	char *fileName;
 	LogLevel logLevel;
 	char *logFileName;
+	int metaPrint;
 	struct timespec playingOffset;
 	char *ptr;
 	int i;
@@ -41,6 +42,7 @@ int main(int argc, char** argv) {
 	fileName = NULL;
 	logLevel = LOG_LEVEL_WARNING;
 	logFileName = NULL;
+	metaPrint = 0;
 	playingOffset.tv_sec = 0;
 	playingOffset.tv_nsec = 0;
 
@@ -124,6 +126,9 @@ int main(int argc, char** argv) {
 						logFileName = &argv[i][2];
 					}
 				break;
+				case 'm':
+					metaPrint = 1;
+				break;
 				case 'o':
 					/* Set offset in file from where to start playing */
 					if(argv[i][2] == '\0') {
@@ -201,6 +206,8 @@ int main(int argc, char** argv) {
 	if(!m4aFileParse(m4aFile)) {
 		return 1;
 	}
+	if(metaPrint)
+		prMetaData();
 
 	/* Open RAOP client */
 	raopClient = raopClientOpenConnection(url, portName, password);
@@ -265,6 +272,7 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 			"                         w: errors and warnings (default)\n"
 			"                         i: errors, warnings and info\n"
                         "                         d: all (includes debug info)\n"
+			"    -m               Print Meta Data\n"
 			"    -l[ ]<filename>  Set logging to specified file\n"
 			"    -o[ ]<offset>    Set offset (in seconds) from begin of file where to start playing\n", shortAppName);
 

@@ -85,6 +85,28 @@ int i;
 	return i;
 }
 
+void prMetaData()
+{
+int i;
+	for (i =0; i < album.metaDataBufferSize; ++i) {
+		fputc(album.metaDataBuffer[i], stderr);
+	}
+
+	fputc(' ', stderr);
+
+	for (i =0; i < artist.metaDataBufferSize; ++i) {
+		fputc(artist.metaDataBuffer[i], stderr);
+	}
+
+	fputc(' ', stderr);
+
+	for (i =0; i < title.metaDataBufferSize; ++i) {
+		fputc(title.metaDataBuffer[i], stderr);
+	}
+
+	fputc('\n', stderr);
+}
+
 int mkMetaData(uint8_t *buffer)
 {
 int off;
