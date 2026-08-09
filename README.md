@@ -13,7 +13,7 @@ How to use it
 -------------
 Light-play is a command line tool. The following command line arguments are valid:
 
-	    Usage: light-play [-?hcpvmlo] <ip address> <filename>
+	    Usage: light-play [-?hcpvlmo] <ip address> <filename>
 	    
 	    -? | -h          Print this usage message
 	    -c[ ]<password>  Set password for using AirPort Express
@@ -23,8 +23,8 @@ Light-play is a command line tool. The following command line arguments are vali
 				 w: errors and warnings (default)
 				 i: errors, warnings and info
 				 d: all (includes debug info)
-	    -m               Print meta data
 	    -l[ ]<filename>  Set logging to specified file
+	    -m               Print meta data
 	    -o[ ]<offset>    Set offset (in seconds) from begin of file where to start playing
 
 If you encounter a problem, please use -vd and check the resulting log. Adding debug information to the log will give very detailed description of both the m4a file parsing as well as the communication with the Airport Express device.
