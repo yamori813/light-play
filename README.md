@@ -13,7 +13,7 @@ How to use it
 -------------
 Light-play is a command line tool. The following command line arguments are valid:
 
-	    Usage: light-play [-?hcpvlo] <url> <filename>
+	    Usage: light-play [-?hcpvmlo] <ip address> <filename>
 	    
 	    -? | -h          Print this usage message
 	    -c[ ]<password>  Set password for using AirPort Express
@@ -23,6 +23,7 @@ Light-play is a command line tool. The following command line arguments are vali
 				 w: errors and warnings (default)
 				 i: errors, warnings and info
 				 d: all (includes debug info)
+	    -m               Print meta data
 	    -l[ ]<filename>  Set logging to specified file
 	    -o[ ]<offset>    Set offset (in seconds) from begin of file where to start playing
 

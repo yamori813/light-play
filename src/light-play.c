@@ -263,7 +263,7 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 	}
 
 	/* Print usage */
-	fprintf(stderr, "Usage: %s [-?hcpvlo] <url> <filename>\n\n" \
+	fprintf(stderr, "Usage: %s [-?hcpvmlo] <ip address> <filename>\n\n" \
 			"    -? | -h          Print this usage message\n" \
 			"    -c[ ]<password>  Set password for using AirPort Express\n" \
 			"    -p[ ]<portname>  Set name/number of AirTunes port (default: 5000)\n"
@@ -272,7 +272,7 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 			"                         w: errors and warnings (default)\n"
 			"                         i: errors, warnings and info\n"
                         "                         d: all (includes debug info)\n"
-			"    -m               Print Meta Data\n"
+			"    -m               Print meta data\n"
 			"    -l[ ]<filename>  Set logging to specified file\n"
 			"    -o[ ]<offset>    Set offset (in seconds) from begin of file where to start playing\n", shortAppName);
 
