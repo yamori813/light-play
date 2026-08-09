@@ -127,7 +127,10 @@ int main(int argc, char** argv) {
 					}
 				break;
 				case 'm':
-					metaPrint = 1;
+					if(argv[i][2] != '\n')
+						metaPrint = atoi(&argv[i][2]);
+					else
+						metaPrint = 7;
 				break;
 				case 'o':
 					/* Set offset in file from where to start playing */
@@ -207,7 +210,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	if(metaPrint)
-		prMetaData();
+		prMetaData(metaPrint);
 
 	/* Open RAOP client */
 	raopClient = raopClientOpenConnection(url, portName, password);
@@ -273,7 +276,7 @@ void printUsage(const char *appName, const char *printFormat, ...) {
 			"                         i: errors, warnings and info\n"
                         "                         d: all (includes debug info)\n"
 			"    -l[ ]<filename>  Set logging to specified file\n"
-			"    -m               Print meta data\n"
+			"    -m[1-7]          Print meta data\n"
 			"    -o[ ]<offset>    Set offset (in seconds) from begin of file where to start playing\n", shortAppName);
 
 	/* Print additional message if present */

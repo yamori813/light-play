@@ -85,23 +85,29 @@ int i;
 	return i;
 }
 
-void prMetaData()
+void prMetaData(int types)
 {
 int i;
-	for (i =0; i < album.metaDataBufferSize; ++i) {
-		fputc(album.metaDataBuffer[i], stderr);
+	if (types & 0x1) {
+		for (i =0; i < album.metaDataBufferSize; ++i) {
+			fputc(album.metaDataBuffer[i], stderr);
+		}
+
+		fputc(' ', stderr);
 	}
 
-	fputc(' ', stderr);
+	if (types & 0x2) {
+		for (i =0; i < title.metaDataBufferSize; ++i) {
+			fputc(title.metaDataBuffer[i], stderr);
+		}
 
-	for (i =0; i < artist.metaDataBufferSize; ++i) {
-		fputc(artist.metaDataBuffer[i], stderr);
+		fputc(' ', stderr);
 	}
 
-	fputc(' ', stderr);
-
-	for (i =0; i < title.metaDataBufferSize; ++i) {
-		fputc(title.metaDataBuffer[i], stderr);
+	if (types & 0x4) {
+		for (i =0; i < artist.metaDataBufferSize; ++i) {
+			fputc(artist.metaDataBuffer[i], stderr);
+		}
 	}
 
 	fputc('\n', stderr);

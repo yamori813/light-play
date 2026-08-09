@@ -26,6 +26,6 @@
 
 void m4aFileMetadataHandler(uint32_t boxType, uint8_t *buffer, uint32_t bufferSize, M4AFileMetadataType metadataType);
 int mkMetaData(uint8_t *buffer);
-void prMetaData();
+void prMetaData(int types);
 
 #endif  /* __META_H__ */
