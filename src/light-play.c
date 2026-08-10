@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
 					}
 				break;
 				case 'm':
-					if(argv[i][2] != '\n')
+					if(argv[i][2] != '\0')
 						metaPrint = atoi(&argv[i][2]);
 					else
 						metaPrint = 7;
