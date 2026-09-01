@@ -85,7 +85,7 @@ int i;
 	return i;
 }
 
-void prMetaData(int types)
+void prMetaData(int types, int sec)
 {
 int i;
 	if (types & 0x1) {
@@ -108,6 +108,12 @@ int i;
 		for (i =0; i < artist.metaDataBufferSize; ++i) {
 			fputc(artist.metaDataBuffer[i], stderr);
 		}
+
+		fputc(' ', stderr);
+	}
+
+	if (types & 0x8) {
+		fprintf(stderr, "%02d:%02d", sec / 60, sec % 60);
 	}
 
 	fputc('\n', stderr);

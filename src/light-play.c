@@ -209,8 +209,15 @@ int main(int argc, char** argv) {
 	if(!m4aFileParse(m4aFile)) {
 		return 1;
 	}
-	if(metaPrint)
-		prMetaData(metaPrint);
+	if(metaPrint) {
+		struct timespec length;
+		int sec;
+		m4aFileGetLength(m4aFile, &length);
+		sec = length.tv_sec;
+		if (length.tv_nsec > 500 * 1000 *1000)
+			++sec;
+		prMetaData(metaPrint, sec);
+	}
 
 	/* Open RAOP client */
 	raopClient = raopClientOpenConnection(url, portName, password);
