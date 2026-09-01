@@ -113,7 +113,11 @@ int i;
 	}
 
 	if (types & 0x8) {
-		fprintf(stderr, "%02d:%02d", sec / 60, sec % 60);
+		if (sec > 3600)
+			fprintf(stderr, "%02d:%02d:%02d", sec / 3600,
+			    (sec % 3600) / 60, (sec % 3600) % 60);
+		else
+			fprintf(stderr, "%02d:%02d", sec / 60, sec % 60);
 	}
 
 	fputc('\n', stderr);
