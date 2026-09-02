@@ -497,8 +497,10 @@ bool raopClientSetVolumeContentSupplier(RAOPClient *raopClient, RTSPRequest *rts
 bool raopClientSetMetaData(RAOPClient *raopClient, RTSPRequest *rtspRequest) {
 	uint8_t content[MAX_SET_PARAMETER_META_SIZE];
 	size_t contentSize;
-
-	contentSize = mkMetaData(content);
+	struct timespec length;
+	m4aFileGetLength(raopClient->m4aFile , &length);
+	contentSize = mkMetaData(content,
+	    length.tv_sec * 1000 + length.tv_nsec / (1000 * 1000));
 
 	if(!rtspRequestSetContent(rtspRequest, content, contentSize, "application/x-dmap-tagged")) {
 		return false;

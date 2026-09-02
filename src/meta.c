@@ -85,6 +85,29 @@ int i;
 	return i;
 }
 
+static int cpMetaInt(uint8_t *buffer, char *boxtype, int val)
+{
+int i;
+
+	memcpy(buffer, boxtype, 4);
+	i = 4;
+
+	buffer[i] = 0;
+	buffer[i+1] = 0;
+	buffer[i+2] = 0;
+	buffer[i+3] = 4;
+	i += 4;
+
+	buffer[i] = val >> 24;
+	buffer[i+1] = (val >> 16) & 0xff;
+	buffer[i+2] = (val >> 8) & 0xff;
+	buffer[i+3] = val & 0xff;
+	i += 4;
+
+	return i;
+}
+
+
 void prMetaData(int types, int sec)
 {
 int i;
@@ -123,7 +146,7 @@ int i;
 	fputc('\n', stderr);
 }
 
-int mkMetaData(uint8_t *buffer)
+int mkMetaData(uint8_t *buffer, int msec)
 {
 int off;
 
@@ -134,6 +157,7 @@ int off;
 		off += cpMetaData(buffer + off, "asar", &artist);
 	if (title.metaDataBufferSize)
 		off += cpMetaData(buffer + off, "minm", &title);
+	off += cpMetaInt(buffer + off, "astm", msec);
 
 	return off;
 }
