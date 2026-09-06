@@ -118,7 +118,8 @@ RTSPClient *rtspClientOpenConnection(const char *hostName, const char *portName,
 	rtspClient->networkConnection = networkOpenConnection(hostName, portName, TCP_CONNECTION, true);
 	if(rtspClient->networkConnection == NULL) {
 		logWrite(LOG_LEVEL_ERROR, LOG_COMPONENT_NAME, "Cannot open RTSP connection for host \"%s\" on port \"%s\".", hostName, portName);
-		rtspClientCloseConnection(&rtspClient);
+// not need close
+//		rtspClientCloseConnection(&rtspClient);
 		return NULL;
 	}
 
